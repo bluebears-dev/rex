@@ -2,12 +2,10 @@ defmodule Rex.Nodes do
   @moduledoc """
   The Nodes context.
   """
-  @const_param :a
-
   import Ecto.Query, warn: false
   alias Rex.Repo
 
-  alias Rex.Nodes.Node
+  alias Rex.Nodes.{Node, Group}
 
   @doc """
   Returns the list of node.
@@ -39,25 +37,23 @@ defmodule Rex.Nodes do
   def get_node!(id), do: Repo.get!(Node, id)
 
   @doc """
-  Creates a node.
-
-  ## Examples
-
-      iex> create_node(%{field: value})
-      {:ok, %Node{}}
-
-      iex> create_node(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Creates a node entity.
   """
-  def create_node(attrs \\ %{}) do
-    %Node{}
-    |> Node.changeset(attrs)
-    |> Repo.insert()
+  def create_node(payload \\ %{}) do
+    new_node = Node.changeset(%Node{}, payload)
+    case Repo.get(Group, payload["group_id"]) do
+      nil ->
+        {:error, %{reason: "Group does not exist"}}
+      group ->
+        new_node
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:group, group)
+        |> Repo.insert()
+    end
   end
 
   @doc """
-  Updates a node.
+  Updates a node.Ecto.UUID.generate()
 
   ## Examples
 
@@ -109,19 +105,13 @@ defmodule Rex.Nodes do
   ## Examples
 
       iex> node_exists?("non_existent")
-      {:error,  "non_existent is not registered"}
+      false
 
   """
-  @spec node_exists?(String.t()) :: :ok | {:error, String.t()}
-  defp node_exists?(node_id) do
-    if Repo.exists?(from(node in Node, where: node.uuid == ^node_id)) do
-      :ok
-    else
-      {:error, "#{node_id} is not registered"}
-    end
+  @spec node_exists?(String.t()) :: boolean
+  def node_exists?(node_id) do
+    Repo.exists?(from node in Node, where: node.node_id == ^node_id)
   end
-
-  alias Rex.Nodes.Group
 
   @doc """
   Returns the list of group.

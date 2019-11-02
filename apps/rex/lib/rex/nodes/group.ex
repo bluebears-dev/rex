@@ -7,7 +7,6 @@ defmodule Rex.Nodes.Group do
   import Ecto.Changeset
 
   @derive {Phoenix.Param, key: :name}
-  @derive {Jason.Encoder, only: [:name]}
   @primary_key {:name, :string, []}
   schema "group" do
     has_many :nodes, Rex.Nodes.Node, foreign_key: :node_id

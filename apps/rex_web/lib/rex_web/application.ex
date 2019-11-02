@@ -9,7 +9,7 @@ defmodule RexWeb.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      RexWeb.Endpoint
+      RexWeb.Endpoint,
       # Starts a worker by calling: RexWeb.Worker.start_link(arg)
       # {RexWeb.Worker, arg},
     ]

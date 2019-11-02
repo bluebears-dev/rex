@@ -16,6 +16,7 @@ defmodule Rex.Nodes.Node do
 
   """
   use Ecto.Schema
+  alias Rex.Nodes.Group
   import Ecto.Changeset
 
   @primary_key {:node_id, Ecto.UUID, []}
@@ -26,19 +27,16 @@ defmodule Rex.Nodes.Node do
     field :performance, :integer, default: @not_yet_benchmarked
     field :connected, :boolean, virtual: true
 
-    belongs_to :group, Rex.Nodes.Group, references: :name, source: :group_name
+    belongs_to :group, Group, references: :name, source: :group, type: :string
 
     timestamps()
   end
 
-  @cast_params ~w(name rendering_client performance)
-  @required_params ~w(name rendering_client)
-
   @doc false
   def changeset(node, attrs) do
     node
-    |> cast(attrs, @cast_params)
-    |> validate_required(@required_params)
+    |> cast(attrs, [:node_id, :name, :rendering_client, :performance])
     |> assoc_constraint(:group)
+    |> validate_required([:node_id, :name, :rendering_client])
   end
 end

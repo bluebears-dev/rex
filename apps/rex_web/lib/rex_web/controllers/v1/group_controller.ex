@@ -11,6 +11,7 @@ defmodule RexWeb.V1.GroupController do
     case Nodes.create_group(%{name: id}) do
       {:ok, _new_group} ->
         Logger.debug("Group creation successful")
+
         conn
         |> send_resp(:created, "")
 
@@ -32,17 +33,16 @@ defmodule RexWeb.V1.GroupController do
     |> send_resp(:no_content, "")
   end
 
-
   defp format_validation_errors(error_keyword_list) do
     error_map =
-        Enum.into(
-          error_keyword_list,
-          [],
-          fn {key, tuple} ->
-            to_string(key) <> " " <> elem(tuple, 0)
-          end
-        )
+      Enum.into(
+        error_keyword_list,
+        [],
+        fn {key, tuple} ->
+          to_string(key) <> " " <> elem(tuple, 0)
+        end
+      )
 
-      %{:cause => error_map}
-    end
+    %{:cause => error_map}
+  end
 end
