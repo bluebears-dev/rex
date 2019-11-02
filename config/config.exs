@@ -26,8 +26,8 @@ config :rex_web, RexWeb.Endpoint,
 
 # Configures Elixir's Logger
 config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  format: "[$time][$level][$metadata] - $message\n",
+  metadata: [:request_id, :function]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

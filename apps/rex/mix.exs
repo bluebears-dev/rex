@@ -38,6 +38,8 @@ defmodule Rex.MixProject do
     [
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
+      {:phoenix, "~> 1.4.10"},
+      {:ecto_enum, "~> 1.3"},
       {:jason, "~> 1.0"}
     ]
   end
