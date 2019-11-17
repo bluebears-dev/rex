@@ -5,13 +5,18 @@ defmodule RexWeb.UserSocket do
   alias Rex.Nodes.Node
 
   ## Channels
-  channel "group:*", RexWeb.DelegateChannel
+  channel "worker:*", RexWeb.DelegateChannel
 
   @spec connect(map, Phoenix.Socket.t(), map) :: {:ok, Phoenix.Socket.t()} | :error
   def connect(_params, socket, _connect_info),
       do: {:ok, socket}
 
-  # TODO: implement returning ID when node_id is set
-  @spec id(Phoenix.Socket.t()) :: String.t()
-  def id(socket), do: nil
+  @spec id(Phoenix.Socket.t()) :: String.t() | nil
+  def id(socket) do
+    if Map.has_key?(socket.assigns, "node_id") do
+      "worker:#{socket.assigns.node_id}"
+    else
+      nil
+    end
+  end
 end

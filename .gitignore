@@ -22,3 +22,6 @@ erl_crash.dump
 # Docker related
 .env
 /postgres-data
+
+
+project_files

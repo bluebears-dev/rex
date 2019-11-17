@@ -57,6 +57,7 @@
       <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/doc" />
       <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/logs" />
       <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/postgres-data" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/project_files" />
     </content>
     <orderEntry type="jdk" jdkName="Elixir 1.9.1" jdkType="Elixir SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

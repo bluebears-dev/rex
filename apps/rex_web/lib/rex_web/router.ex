@@ -9,7 +9,7 @@ defmodule RexWeb.Router do
     pipe_through :api
 
     scope "/v1", V1, as: :v1 do
-      resources "/groups", GroupController, only: [:create, :delete], param: "name"
+      resources "/projects", ProjectController, only: [:create, :delete, :update], param: "id"
     end
   end
 end
