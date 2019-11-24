@@ -18,9 +18,9 @@ defmodule RexWeb.V1.ProjectController do
       {:warn, message} ->
         conn
         |> send_resp(:accepted, Jason.encode!([message]))
-      {:error, message} when is_binary(message) ->
+      {:error, message, status} when is_binary(message) ->
         conn
-        |> send_resp(:bad_request, Jason.encode!([message]))
+        |> send_resp(status, Jason.encode!([message]))
       {:error, changeset} ->
         conn
         |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
@@ -33,12 +33,24 @@ defmodule RexWeb.V1.ProjectController do
       {:ok, _changeset} ->
         conn
         |> send_resp(:no_content, "")
-      {:error, message} when is_binary(message) ->
+      {:error, message, status} when is_binary(message) ->
         conn
-        |> send_resp(:not_found, Jason.encode!([message]))
+        |> send_resp(status, Jason.encode!([message]))
       {:error, changeset} ->
         conn
         |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
+    end
+  end
+
+  def download(conn, %{"id" => id}) do
+    case ProjectHandler.handle_download(id) do
+      {:ok, path} ->
+        conn
+        |> put_resp_header("content-disposition", ~s(attachment; filename="#{path}"))
+        |> send_file(200, path)
+      {:error, message, status} ->
+        conn
+        |> send_resp(status, Jason.encode!([message]))
     end
   end
 end

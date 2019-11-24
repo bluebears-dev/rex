@@ -9,10 +9,10 @@ defmodule Rex.Entity.Project do
 
   @derive {
     Jason.Encoder,
-    only: [:id, :filename, :height, :width, :state, :result, :starting_frame, :total_frames, :type]
+    only: [:id, :path, :height, :width, :state, :result, :starting_frame, :total_frames, :type]
   }
   schema "projects" do
-    field :filename, :string
+    field :path, :string
     field :height, :integer
     field :result, :string, default: nil
     field :starting_frame, :integer
@@ -27,8 +27,8 @@ defmodule Rex.Entity.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:filename, :type, :width, :height, :starting_frame, :total_frames, :result, :state])
-    |> validate_required([:filename, :type, :width, :height, :starting_frame, :total_frames])
+    |> cast(attrs, [:path, :type, :width, :height, :starting_frame, :total_frames, :result, :state])
+    |> validate_required([:path, :type, :width, :height, :starting_frame, :total_frames])
   end
 
   def fetch(term, key) do
@@ -54,6 +54,4 @@ defmodule Rex.Entity.Project do
     |> Map.from_struct()
     |> Map.pop(key)
   end
-
-
 end

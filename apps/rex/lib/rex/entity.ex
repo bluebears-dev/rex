@@ -130,7 +130,7 @@ defmodule Rex.Entity do
       :ok ->
         valid_payload = payload
                         |> Map.drop([:state])
-                        |> Map.put("filename", filename)
+                        |> Map.put("path", filename)
 
         Project.changeset(%Project{}, valid_payload)
         |> Repo.insert()
@@ -141,19 +141,19 @@ defmodule Rex.Entity do
   @doc """
   Copies file into projects directory.
   """
-  @spec copy_project_file(String.t(), %Plug.Upload{}) :: :ok | {:error, atom}
+  @spec copy_project_file(String.t(), %Plug.Upload{}) :: :ok | {:error, atom, atom}
   defp copy_project_file(new_path, %Plug.Upload{path: path, filename: filename}) do
     extension = Path.extname(filename)
     if extension === ".blend" do
       File.cp(path, new_path)
       :ok
     else
-      {:error, "Received file was not the .blend file"}
+      {:error, "Received file was not the .blend file", :bad_request}
     end
   end
 
   defp copy_project_file(_new_path, _upload),
-       do: {:error, "Received invalid data"}
+       do: {:error, "Received invalid data", :bad_request}
 
   @doc """
   Cancel a project entity.
@@ -161,7 +161,7 @@ defmodule Rex.Entity do
   def cancel_project(id) do
     case get_project(id) do
       nil ->
-        {:error, "No project of #{id} has been found"}
+        {:error, "No project of #{id} has been found", :not_found}
       project ->
         project
         |> Project.changeset(%{state: :canceled})
