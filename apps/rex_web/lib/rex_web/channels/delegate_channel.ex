@@ -16,9 +16,9 @@ defmodule RexWeb.DelegateChannel do
     end
   end
 
-#  @spec terminate(tuple, Phoenix.Socket.t()) :: :ok
-#  def terminate(:shutdown, socket) do
-#    socket.assigns.node_id
-#    |> GroupHandler.handle_leave!()
-#  end
+  #  @spec terminate(tuple, Phoenix.Socket.t()) :: :ok
+  #  def terminate(:shutdown, socket) do
+  #    socket.assigns.node_id
+  #    |> GroupHandler.handle_leave!()
+  #  end
 end

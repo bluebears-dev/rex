@@ -1,20 +1,25 @@
 import EctoEnum
 defenum(ProjectTypeEnum, animation: 0, scene: 1)
-defenum(ProjectStateEnum, in_progress: 0, complete: 1, canceled: 2)
+defenum(ProjectStateEnum, queued: -1, in_progress: 0, complete: 1, canceled: 2)
 
 defmodule Rex.Entity.Project do
   use Ecto.Schema
   import Ecto.Changeset
   @behaviour Access
 
+  @derive {
+    Jason.Encoder,
+    only: [:id, :filename, :height, :width, :state, :result, :starting_frame, :total_frames, :type]
+  }
   schema "projects" do
     field :filename, :string
     field :height, :integer
     field :result, :string, default: nil
     field :starting_frame, :integer
+    field :total_frames, :integer
     field :type, ProjectTypeEnum
     field :width, :integer
-    field :state, ProjectStateEnum, default: :in_progress
+    field :state, ProjectStateEnum, default: :queued
 
     timestamps()
   end
@@ -22,8 +27,8 @@ defmodule Rex.Entity.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:filename, :type, :width, :height, :starting_frame, :result, :state])
-    |> validate_required([:filename, :type, :width, :height, :starting_frame])
+    |> cast(attrs, [:filename, :type, :width, :height, :starting_frame, :total_frames, :result, :state])
+    |> validate_required([:filename, :type, :width, :height, :starting_frame, :total_frames])
   end
 
   def fetch(term, key) do
@@ -48,5 +53,7 @@ defmodule Rex.Entity.Project do
     data
     |> Map.from_struct()
     |> Map.pop(key)
-    end
+  end
+
+
 end

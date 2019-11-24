@@ -43,7 +43,7 @@ defmodule Rex.Entity do
   """
   def create_node(payload) do
     new_node = Node.changeset(%Node{}, payload)
-    |> Repo.insert()
+               |> Repo.insert()
   end
 
   @doc """
@@ -168,6 +168,30 @@ defmodule Rex.Entity do
         |> Repo.update()
     end
   end
+
+  @doc """
+  Gets next queued project.
+  """
+  def next_project do
+    Ecto.Query.from(
+      project in Project,
+      where: project.state == ^:queued,
+      order_by: [
+        desc: project.inserted_at
+      ],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
+  @doc """
+  Updates a project.
+  """
+  def update_project(%Project{} = project, attrs) do
+    project
+    |> Project.changeset(attrs)
+    |> Repo.update()
+  end
   #  @doc """
   #  Returns the list of group.
   #
@@ -261,13 +285,4 @@ defmodule Rex.Entity do
   #  def change_group(%Group{} = group) do
   #    Group.changeset(group, %{})
   #  end
-  def format_validation_errors(error_keyword_list) do
-    Enum.into(
-      error_keyword_list,
-      [],
-      fn {key, tuple} ->
-        to_string(key) <> " " <> elem(tuple, 0)
-      end
-    )
-  end
 end

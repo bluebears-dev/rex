@@ -9,7 +9,7 @@ defmodule RexWeb.NodeHandler do
     node_id = Ecto.UUID.generate()
     Logger.info("Generated UUID: #{node_id}")
 
-
+    # add project_id as a return if project is rendering
     Map.put(payload, "node_id", node_id)
     |> Entity.create_node()
     |> case do

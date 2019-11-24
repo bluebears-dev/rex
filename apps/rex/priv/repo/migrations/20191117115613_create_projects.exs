@@ -8,6 +8,7 @@ defmodule Rex.Repo.Migrations.CreateProjects do
       add :width, :integer
       add :height, :integer
       add :starting_frame, :integer
+      add :total_frames, :integer
       add :result, :string
       add :state, ProjectStateEnum.type(), null: false
 

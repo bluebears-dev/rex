@@ -4,26 +4,32 @@ defmodule RexWeb.V1.ProjectController do
   use RexWeb, :controller
 
   alias Jason
-  alias Rex.Entity
+  alias Rex.Utils
+  alias RexWeb.ProjectHandler
 
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, body) do
-    case Entity.create_project(body) do
-      {:ok, new_project} ->
+    status = ProjectHandler.handle_new(body)
+    Logger.debug("Project handler response #{inspect status}")
+    case status do
+      {:ok, response} ->
         conn
-        |> send_resp(:ok, Jason.encode!(%{id: new_project[:id]}))
+        |> send_resp(:ok, Jason.encode!(response))
+      {:warn, message} ->
+        conn
+        |> send_resp(:accepted, Jason.encode!([message]))
       {:error, message} when is_binary(message) ->
         conn
         |> send_resp(:bad_request, Jason.encode!([message]))
       {:error, changeset} ->
         conn
-        |> send_resp(:bad_request, Jason.encode!(Entity.format_validation_errors(changeset.errors)))
+        |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
     end
   end
 
   @spec delete(Plug.Conn.t(), map) :: Plug.Conn.t()
   def delete(conn, %{"id" => id}) do
-    case Entity.cancel_project(id) do
+    case ProjectHandler.handle_cancel(id) do
       {:ok, _changeset} ->
         conn
         |> send_resp(:no_content, "")
@@ -32,7 +38,7 @@ defmodule RexWeb.V1.ProjectController do
         |> send_resp(:not_found, Jason.encode!([message]))
       {:error, changeset} ->
         conn
-        |> send_resp(:bad_request, Jason.encode!(Entity.format_validation_errors(changeset.errors)))
+        |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
     end
   end
 end
