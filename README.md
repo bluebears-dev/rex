@@ -2,6 +2,6 @@
 
 ## Development
 
-* Credo
-* Docker
-* PostgreSQL
+- Credo
+- Docker
+- PostgreSQL

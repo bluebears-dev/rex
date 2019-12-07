@@ -2,7 +2,6 @@ require Logger
 
 defmodule RexWeb.UserSocket do
   use Phoenix.Socket
-  alias Rex.Nodes.Node
 
   ## Channels
   channel "worker:*", RexWeb.DelegateChannel

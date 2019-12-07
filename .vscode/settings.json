@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "rex",
+            "dialect": "PostgreSQL",
+            "name": "Rex Postgres",
+            "password": "supervisor",
+            "port": 5432,
+            "server": "localhost",
+            "username": "rex"
+        }
+    ]
+}

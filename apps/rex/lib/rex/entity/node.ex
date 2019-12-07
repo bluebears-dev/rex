@@ -8,7 +8,6 @@ defmodule Rex.Entity.Node do
 
   """
   use Ecto.Schema
-  alias Rex.Nodes.Group
   import Ecto.Changeset
 
   @primary_key {:node_id, Ecto.UUID, []}

@@ -42,8 +42,8 @@ defmodule Rex.Entity do
   Creates a node entity.
   """
   def create_node(payload) do
-    new_node = Node.changeset(%Node{}, payload)
-               |> Repo.insert()
+    Node.changeset(%Node{}, payload)
+    |> Repo.insert()
   end
 
   @doc """
@@ -126,24 +126,26 @@ defmodule Rex.Entity do
   """
   def create_project(payload \\ %{}) do
     filename = "#{@default_dir}/#{Ecto.UUID.generate()}.blend"
+
     case copy_project_file(filename, payload["project"]) do
       :ok ->
-        valid_payload = payload
-                        |> Map.drop([:state])
-                        |> Map.put("path", filename)
+        valid_payload =
+          payload
+          |> Map.drop([:state])
+          |> Map.put("path", filename)
 
         Project.changeset(%Project{}, valid_payload)
         |> Repo.insert()
-      error -> error
+
+      error ->
+        error
     end
   end
 
-  @doc """
-  Copies file into projects directory.
-  """
   @spec copy_project_file(String.t(), %Plug.Upload{}) :: :ok | {:error, atom, atom}
   defp copy_project_file(new_path, %Plug.Upload{path: path, filename: filename}) do
     extension = Path.extname(filename)
+
     if extension === ".blend" do
       File.cp(path, new_path)
       :ok
@@ -153,7 +155,7 @@ defmodule Rex.Entity do
   end
 
   defp copy_project_file(_new_path, _upload),
-       do: {:error, "Received invalid data", :bad_request}
+    do: {:error, "Received invalid data", :bad_request}
 
   @doc """
   Cancel a project entity.
@@ -162,6 +164,7 @@ defmodule Rex.Entity do
     case get_project(id) do
       nil ->
         {:error, "No project of #{id} has been found", :not_found}
+
       project ->
         project
         |> Project.changeset(%{state: :canceled})
@@ -192,6 +195,7 @@ defmodule Rex.Entity do
     |> Project.changeset(attrs)
     |> Repo.update()
   end
+
   #  @doc """
   #  Returns the list of group.
   #

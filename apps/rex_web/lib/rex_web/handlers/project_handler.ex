@@ -1,13 +1,13 @@
 require Logger
 
 defmodule RexWeb.ProjectHandler do
-  alias Rex.Entity
+  alias Rex.{Entity, Manager}
   alias Rex.Entity.Project
   alias RexWeb.Endpoint
 
   def handle_new(payload) do
-    with {:ok, project} <- Entity.create_project(payload),
-         {:ok, started_project} <- GenServer.call(Manager, :start_project)
+    with {:ok, _project} <- Entity.create_project(payload),
+         {:ok, started_project} <- Manager.start_new_project()
     do
       response = %{id: started_project.id}
       Logger.debug("Broadcasting info about new project")

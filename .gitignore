@@ -23,5 +23,5 @@ erl_crash.dump
 .env
 /postgres-data
 
-
+.elixir_ls
 project_files
