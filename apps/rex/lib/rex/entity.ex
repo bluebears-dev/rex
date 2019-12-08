@@ -9,7 +9,7 @@ defmodule Rex.Entity do
   import Ecto.Query, warn: false
   alias Rex.Repo
 
-  alias Rex.Entity.{Node, Project}
+  alias Rex.Entity.{Node, Project, Task}
 
   @doc """
   Returns the list of node.
@@ -20,9 +20,8 @@ defmodule Rex.Entity do
       [%Node{}, ...]
 
   """
-  def list_node do
-    Repo.all(Node)
-  end
+  def list_node,
+    do: Repo.all(Node)
 
   @doc """
   Gets a single node or nil.
@@ -36,7 +35,8 @@ defmodule Rex.Entity do
       nil
 
   """
-  def get_node(id), do: Repo.get(Node, id)
+  def get_node(id),
+    do: Repo.get(Node, id)
 
   @doc """
   Creates a node entity.
@@ -103,9 +103,8 @@ defmodule Rex.Entity do
 
   """
   @spec node_exists?(String.t()) :: boolean
-  def node_exists?(node_id) do
-    Repo.exists?(from node in Node, where: node.node_id == ^node_id)
-  end
+  def node_exists?(node_id),
+    do: Repo.exists?(from node in Node, where: node.node_id == ^node_id)
 
   @doc """
   Gets a single project or nil.
@@ -119,7 +118,8 @@ defmodule Rex.Entity do
       nil
 
   """
-  def get_project(id), do: Repo.get(Project, id)
+  def get_project(id),
+    do: Repo.get(Project, id)
 
   @doc """
   Creates a project entity.
@@ -195,4 +195,85 @@ defmodule Rex.Entity do
     |> Project.changeset(attrs)
     |> Repo.update()
   end
+
+  @doc """
+  Returns the list of tasks for given project id.
+
+  ## Examples
+
+      iex> list_task(1)
+      [%Task{}, ...]
+
+  """
+  @spec list_task(binary) :: list(Task.t())
+  def list_task(project_id),
+    do: Ecto.Query.from(
+      task in Task,
+      where: task.project == ^project_id
+    )
+
+  @doc """
+  Gets a single task or nil.
+
+  ## Examples
+
+      iex> get_task(123)
+      %Task{}
+
+      iex> get_task(456)
+      nil
+
+  """
+  @spec get_task(integer) :: Task.t()
+  def get_task(id),
+    do: Repo.get(Task, id)
+
+  @doc """
+  Creates a task entity.
+  """
+  def create_task(payload) do
+    Task.changeset(%Task{}, payload)
+    |> Repo.insert()
+  end
+
+ @doc """
+  Updates a task entity.
+  """
+  def update_task(%Task{} = task, attrs) do
+    task
+    |> Task.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Batch creates tasks from the list.
+  """
+  def batch_create_task(payloads) do
+    alias Ecto.Multi
+
+    payloads
+    |> Enum.reduce(Multi.new(), fn task, multi ->
+      Multi.insert(multi, {:insert, task.frame}, Task.changeset(%Task{}, task))
+    end)
+    |> Repo.transaction()
+  end
+
+  @doc """
+  Returns the first free task.
+
+  ## Examples
+
+      iex> first_free_task(1)
+      %Task{}
+
+  """
+  @spec first_free_task(binary) :: Task.t()
+  def first_free_task(project_id),
+    do: Ecto.Query.from(
+      task in Task,
+      where: task.project == ^project_id,
+      where: is_nil(task.node),
+      order_by: [desc: :inserted_at],
+      limit: 1
+    ) |> Repo.one()
 end

@@ -14,9 +14,9 @@ defmodule Rex.Manager do
     GenServer.start_link(__MODULE__, state, name: @name)
   end
 
-  @spec start_new_project() :: any
-  def start_new_project(),
-    do: GenServer.call(@name, {:start_project})
+  @spec start_new_project(Project.t()) :: any
+  def start_new_project(new_project),
+    do: GenServer.cast(@name, {:start_project, new_project})
 
   @spec get_state() :: any
   def get_state(),
@@ -29,23 +29,9 @@ defmodule Rex.Manager do
   end
 
   @impl true
-  def handle_call({:start_project}, _from, %Manager{project: %{state: :in_progress}} = state) do
-    Logger.debug("Called new project task: state=#{inspect(state)}}")
-    {:reply, {:warn, "Project in progress"}, state}
-  end
-
-  @impl true
-  def handle_call({:start_project}, _from, state) do
-    Logger.debug("Called new project task: state=#{inspect(state)}}")
-
-    case Entity.next_project() do
-      nil ->
-        {:reply, {:error, "No queued projects"}, state}
-
-      project ->
-        {:ok, new_project} = response = Entity.update_project(project, %{state: :in_progress})
-        {:reply, response, %{state | project: new_project}}
-    end
+  def handle_cast({:start_project, new_project}, state) do
+    Logger.debug("Starting new project: state=#{inspect state}}")
+    {:noreply, %{state | project: new_project}}
   end
 
   @impl true

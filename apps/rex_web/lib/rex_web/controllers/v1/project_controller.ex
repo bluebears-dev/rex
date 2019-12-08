@@ -5,7 +5,7 @@ defmodule RexWeb.V1.ProjectController do
 
   alias Jason
   alias Rex.Utils
-  alias RexWeb.ProjectHandler
+  alias RexWeb.{ProjectHandler, TaskHandler}
 
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, body) do
@@ -52,5 +52,9 @@ defmodule RexWeb.V1.ProjectController do
         conn
         |> send_resp(status, Jason.encode!([message]))
     end
+  end
+
+  def register_fragment(conn, %{"id" => id, "frame" => frame, "fragment" => file} = body) do
+    TaskHandler.save_fragment()
   end
 end
