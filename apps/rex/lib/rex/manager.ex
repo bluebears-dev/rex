@@ -3,17 +3,24 @@ require Logger
 defmodule Rex.Manager do
   use GenServer
 
-  alias Rex.Entity
+  alias Rex.{Entity, Manager}
+  alias Rex.Entity.Project
 
+  @name :manager
+  defstruct project: %Project{}
+
+  @spec start_link(Manager.t()) :: any
   def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: :manager)
+    GenServer.start_link(__MODULE__, state, name: @name)
   end
 
+  @spec start_new_project() :: any
   def start_new_project(),
-    do: GenServer.call(:manager, {:start_project})
+    do: GenServer.call(@name, {:start_project})
 
+  @spec get_state() :: any
   def get_state(),
-    do: GenServer.call(:manager, {:get_state})
+    do: GenServer.call(@name, {:get_state})
 
   @impl true
   def init(state) do
@@ -22,7 +29,7 @@ defmodule Rex.Manager do
   end
 
   @impl true
-  def handle_call({:start_project}, _from, %{project: %{state: :in_progress}} = state) do
+  def handle_call({:start_project}, _from, %Manager{project: %{state: :in_progress}} = state) do
     Logger.debug("Called new project task: state=#{inspect(state)}}")
     {:reply, {:warn, "Project in progress"}, state}
   end
@@ -30,6 +37,7 @@ defmodule Rex.Manager do
   @impl true
   def handle_call({:start_project}, _from, state) do
     Logger.debug("Called new project task: state=#{inspect(state)}}")
+
     case Entity.next_project() do
       nil ->
         {:reply, {:error, "No queued projects"}, state}

@@ -8,7 +8,7 @@ defmodule Rex.Application do
   def start(_type, _args) do
     children = [
       Rex.Repo,
-      {Rex.Manager, %{project: nil}}
+      {Rex.Manager, %Rex.Manager{project: nil}}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Rex.Supervisor)
