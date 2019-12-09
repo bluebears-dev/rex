@@ -206,11 +206,13 @@ defmodule Rex.Entity do
 
   """
   @spec list_task(binary) :: list(Task.t())
-  def list_task(project_id),
-    do: Ecto.Query.from(
+  def list_task(project_id) do
+    Ecto.Query.from(
       task in Task,
       where: task.project == ^project_id
     )
+    |> Repo.all()
+  end
 
   @doc """
   Gets a single task or nil.
@@ -236,7 +238,7 @@ defmodule Rex.Entity do
     |> Repo.insert()
   end
 
- @doc """
+  @doc """
   Updates a task entity.
   """
   def update_task(%Task{} = task, attrs) do
@@ -268,12 +270,24 @@ defmodule Rex.Entity do
 
   """
   @spec first_free_task(binary) :: Task.t()
-  def first_free_task(project_id),
-    do: Ecto.Query.from(
+  def first_free_task(project_id) do
+    Ecto.Query.from(
       task in Task,
       where: task.project == ^project_id,
       where: is_nil(task.node),
       order_by: [desc: :inserted_at],
       limit: 1
-    ) |> Repo.one()
+    )
+    |> Repo.one()
+  end
+
+  def list_complete_task(project_id) do
+    Ecto.Query.from(
+      task in Task,
+      where: task.project == ^project_id,
+      where: not is_nil(task.path),
+      order_by: [desc: :inserted_at]
+    )
+    |> Repo.all()
+  end
 end

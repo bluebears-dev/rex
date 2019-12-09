@@ -27,6 +27,18 @@ defmodule RexWeb.V1.ProjectController do
     end
   end
 
+  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def show(conn, %{"id" => id}) do
+    case ProjectHandler.handle_project_status(id) do
+      {:ok, response} ->
+        conn
+        |> send_resp(:ok, Jason.encode!(response))
+      _ ->
+        conn
+        |> send_resp(:bad_request, "")
+    end
+  end
+
   @spec delete(Plug.Conn.t(), map) :: Plug.Conn.t()
   def delete(conn, %{"id" => id}) do
     case ProjectHandler.handle_cancel(id) do

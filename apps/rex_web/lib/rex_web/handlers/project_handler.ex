@@ -76,4 +76,17 @@ defmodule RexWeb.ProjectHandler do
       response -> {:warn, response}
     end
   end
+
+  def handle_project_status(project_id) do
+    with all_tasks when is_list(all_tasks) <- Entity.list_task(project_id),
+         complete_tasks when is_list(complete_tasks) <- Entity.list_complete_task(project_id) do
+      {:ok,
+       %{
+         all: Enum.count(all_tasks),
+         complete: Enum.count(complete_tasks)
+       }}
+    else
+      error -> Logger.debug("#{inspect error}")
+    end
+  end
 end
