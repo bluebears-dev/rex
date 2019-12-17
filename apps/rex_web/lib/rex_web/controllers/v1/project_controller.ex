@@ -66,7 +66,9 @@ defmodule RexWeb.V1.ProjectController do
     end
   end
 
-  def register_fragment(conn, %{"id" => id, "frame" => frame, "fragment" => file} = body) do
-    TaskHandler.save_fragment()
+  def register_fragment(conn, %{"id" => id, "frame" => frame, "fragment" => file}) do
+    TaskHandler.save_fragment(id, frame, file)
+    conn
+    |> send_resp(200, "")
   end
 end

@@ -3,14 +3,39 @@ defmodule RexWeb.TaskHandler do
   This module contains logic involving handling task related
   events received from nodes or generally task related operations.
   """
-  alias RexWeb.LoadBalancing
+  require RexWeb.Events
+  alias RexWeb.{Events, LoadBalancing, ProjectHandler}
+  alias Rex.{Entity, Manager}
 
-  @spec handle_fetch_task(String.t()) :: Task.t()
+  @spec handle_fetch_task(String.t()) :: Task.t() | nil
   def handle_fetch_task(node_id) do
-    LoadBalancing.RoundRobin.get_next_task(node_id)
+    case LoadBalancing.RoundRobin.get_next_task(node_id) do
+      nil ->
+        if is_finished?() do
+          {:ok, Events.project_complete()}
+        else
+          {:ok, Events.no_tasks()}
+        end
+      task ->
+        task
+    end
   end
 
-  def save_fragment() do
+  def save_fragment(project_id, frame, file) do
+    task = Entity.get_task_by_project(project_id, frame)
+    path = Entity.save_fragment(task, file)
+    Entity.update_task(task, %{path: path})
+  end
 
+  defp is_finished?() do
+    with {:ok, %{project: %{id: project_id}}} <- Manager.get_state(),
+         {:ok, status} <- ProjectHandler.handle_project_status(project_id) do
+      %{
+        all: all,
+        complete: complete
+      } = status
+
+      all === complete
+    end
   end
 end

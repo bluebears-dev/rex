@@ -4,7 +4,8 @@ defmodule Rex.Entity do
   @moduledoc """
   The Nodes context.
   """
-  @default_dir "project_files"
+  @default_project_dir "./project_files"
+  @default_fragments_dir "./fragments"
 
   import Ecto.Query, warn: false
   alias Rex.Repo
@@ -125,9 +126,9 @@ defmodule Rex.Entity do
   Creates a project entity.
   """
   def create_project(payload \\ %{}) do
-    filename = "#{@default_dir}/#{Ecto.UUID.generate()}.blend"
+    filename = "#{@default_project_dir}/#{Ecto.UUID.generate()}.blend"
 
-    case copy_project_file(filename, payload["project"]) do
+    case validate_and_copy_file(filename, payload["project"], "blend") do
       :ok ->
         valid_payload =
           payload
@@ -142,19 +143,40 @@ defmodule Rex.Entity do
     end
   end
 
-  @spec copy_project_file(String.t(), %Plug.Upload{}) :: :ok | {:error, atom, atom}
-  defp copy_project_file(new_path, %Plug.Upload{path: path, filename: filename}) do
-    extension = Path.extname(filename)
+  @spec save_fragment(Task.t(), %Plug.Upload{}) :: :ok | :error
+  def save_fragment(task, payload) do
+    path = "#{@default_fragments_dir}/#{task.project}/#{task.frame}.png"
 
-    if extension === ".blend" do
-      File.cp(path, new_path)
-      :ok
-    else
-      {:error, "Received file was not the .blend file", :bad_request}
+    case validate_and_copy_file(path, payload, "png") do
+      :ok ->
+        path
+
+      error ->
+        error
     end
   end
 
-  defp copy_project_file(_new_path, _upload),
+  @spec validate_and_copy_file(String.t(), %Plug.Upload{}, String.t()) ::
+          :ok | {:error, atom, atom}
+  defp validate_and_copy_file(
+         new_path,
+         %Plug.Upload{path: path, filename: filename},
+         expected_format
+       ) do
+    extension = Path.extname(filename)
+    Logger.info("Saving frame: #{new_path}")
+
+    # Perhaps validate it properly
+    with "." <> ^expected_format <- extension,
+         :ok <- File.mkdir_p(Path.dirname(new_path)),
+         :ok <- File.cp(path, new_path) do
+      :ok
+    else
+      {:error, result} -> {:error, "Failed when trying to save file #{result}", :bad_request}
+    end
+  end
+
+  defp validate_and_copy_file(_new_path, _upload, _expected_format),
     do: {:error, "Received invalid data", :bad_request}
 
   @doc """
@@ -289,5 +311,15 @@ defmodule Rex.Entity do
       order_by: [desc: :inserted_at]
     )
     |> Repo.all()
+  end
+
+  def get_task_by_project(project_id, frame) do
+    Ecto.Query.from(
+      task in Task,
+      where: task.project == ^project_id,
+      where: task.frame == ^frame,
+      limit: 1
+    )
+    |> Repo.one()
   end
 end

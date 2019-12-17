@@ -5,5 +5,7 @@ defmodule RexWeb.Events do
   use Constants
 
   define new_project, "NEW:PROJECT"
+  define project_complete,  "COMPLETE:PROJECT"
   define fetch_task,  "FETCH:TASK"
+  define no_tasks,  "EMPTY:TASK"
 end

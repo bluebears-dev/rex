@@ -23,11 +23,16 @@ defmodule RexWeb.DelegateChannel do
   end
 
   def handle_in(Events.fetch_task(), _payload, socket) do
-    {:ok, task} =
+    result =
       Ecto.UUID.cast!(socket.assigns.node_id)
       |> TaskHandler.handle_fetch_task()
 
-    {:reply, {:ok, %{event: Events.fetch_task(), payload: task}}, socket}
+    case result do
+      {:ok, event} when is_binary(event) ->
+        {:reply, {:ok, %{event: event}}, socket}
+      {:ok, task} ->
+        {:reply, {:ok, %{event: Events.fetch_task(), payload: task}}, socket}
+    end
   end
 
   def handle_info(:after_join, socket) do
