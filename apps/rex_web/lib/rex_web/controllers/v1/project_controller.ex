@@ -33,9 +33,12 @@ defmodule RexWeb.V1.ProjectController do
       {:ok, response} ->
         conn
         |> send_resp(:ok, Jason.encode!(response))
-      _ ->
+      {:error, message, status} when is_binary(message) ->
         conn
-        |> send_resp(:bad_request, "")
+        |> send_resp(status, message)
+      {:error, changeset} ->
+        conn
+        |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
     end
   end
 

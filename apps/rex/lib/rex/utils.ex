@@ -8,4 +8,10 @@ defmodule Rex.Utils do
       end
     )
   end
+
+  defp get_current_timestamp(),
+    do: :os.system_time(:seconds)
+
+  def save_timestamp(path, message),
+    do: File.write!(path, "#{message}-#{get_current_timestamp()}", [:append])
 end

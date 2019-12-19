@@ -1,3 +1,5 @@
+require Logger
+
 defmodule RexWeb.TaskHandler do
   @moduledoc """
   This module contains logic involving handling task related
@@ -12,6 +14,7 @@ defmodule RexWeb.TaskHandler do
     case LoadBalancing.RoundRobin.get_next_task(node_id) do
       nil ->
         if is_finished?() do
+          ProjectHandler.start_next_project()
           {:ok, Events.project_complete()}
         else
           {:ok, Events.no_tasks()}
@@ -34,7 +37,7 @@ defmodule RexWeb.TaskHandler do
         all: all,
         complete: complete
       } = status
-
+      Logger.info("Project status: #{inspect status}")
       all === complete
     end
   end
