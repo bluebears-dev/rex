@@ -9,7 +9,7 @@ defmodule Rex.Manager do
   @name :manager
   defstruct project: %Project{}
 
-  @spec start_link(Manager.t()) :: any
+  @spec start_link(any) :: any
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: @name)
   end

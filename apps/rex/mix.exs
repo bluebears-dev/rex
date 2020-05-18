@@ -13,7 +13,8 @@ defmodule Rex.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -23,7 +24,7 @@ defmodule Rex.MixProject do
   def application do
     [
       mod: {Rex.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger_file_backend, :logger, :runtime_tools]
     ]
   end
 
@@ -40,7 +41,8 @@ defmodule Rex.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix, "~> 1.4.10"},
       {:ecto_enum, "~> 1.3"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:logger_file_backend, "~> 0.0.11"}
     ]
   end
 
