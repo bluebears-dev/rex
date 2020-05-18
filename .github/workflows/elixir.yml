@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     env:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -15,6 +15,7 @@ jobs:
       DATABASE: ${{ secrets.DATABASE }}
       MIX_ENV: test
       PORT: 5432
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     steps:
     - uses: actions/checkout@v2
@@ -27,11 +28,6 @@ jobs:
       run: docker-compose up -d
     - name: Install Dependencies
       run: mix deps.get
-  test:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
     - name: Run Tests
       run: mix test
     - name: Get coverage
