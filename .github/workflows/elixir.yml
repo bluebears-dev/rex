@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     env:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -28,7 +27,12 @@ jobs:
       run: docker-compose up -d
     - name: Install Dependencies
       run: mix deps.get
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
     - name: Run Tests
       run: mix test
     - name: Get coverage
-      run: mix coveralls
+      run: mix coveralls.github
