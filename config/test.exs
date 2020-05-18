@@ -2,9 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :rex, Rex.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "rex_test",
+  username: "rex",
+  password: "supervisor",
+  database: "rex",
+  port: 5432,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

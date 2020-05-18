@@ -48,7 +48,9 @@ config :rex_web, RexWeb.Endpoint,
 # different ports.
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :console,
+  format: "[$time][$level]{$metadata}\n > $message\n",
+  metadata: [:request_id, :module, :function, :line]
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime

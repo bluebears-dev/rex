@@ -14,7 +14,8 @@ defmodule RexWeb.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -24,7 +25,7 @@ defmodule RexWeb.MixProject do
   def application do
     [
       mod: {RexWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger_file_backend, :logger, :runtime_tools]
     ]
   end
 
@@ -42,8 +43,9 @@ defmodule RexWeb.MixProject do
       {:phoenix_ecto, "~> 4.0"},
       {:gettext, "~> 0.11"},
       {:rex, in_umbrella: true},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:jason, "~> 1.1.2"},
+      {:plug_cowboy, "~> 2.0"},
+      {:logger_file_backend, "~> 0.0.10"}
     ]
   end
 

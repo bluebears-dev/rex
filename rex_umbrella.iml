@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="ELIXIR_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/rex_umbrella/ebin" />
+    <output-test url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/rex_umbrella/ebin" />
+    <content url="file://$USER_HOME$/Lab/Code/rex_umbrella">
+      <sourceFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/lib" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/spec" isTestSource="true" />
+      <sourceFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/test" isTestSource="true" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/bunt" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/connection" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/cowboy" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/cowlib" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/credo" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/db_connection" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/decimal" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/dialyxir" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/ecto" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/ecto_enum" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/ecto_sql" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/gettext" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/jason" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/mime" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/phoenix" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/phoenix_ecto" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/phoenix_pubsub" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/plug" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/plug_cowboy" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/plug_crypto" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/postgrex" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/ranch" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/dev/lib/telemetry" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/connection" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/cowboy" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/cowlib" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/db_connection" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/decimal" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/ecto" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/ecto_enum" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/ecto_sql" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/gettext" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/jason" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/mime" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/phoenix" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/phoenix_ecto" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/phoenix_pubsub" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/plug" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/plug_cowboy" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/plug_crypto" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/postgrex" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/ranch" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/_build/test/lib/telemetry" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/assets/node_modules/phoenix" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/assets/node_modules/phoenix_html" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/cover" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/deps" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/doc" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/logs" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/postgres-data" />
+      <excludeFolder url="file://$USER_HOME$/Lab/Code/rex_umbrella/project_files" />
+    </content>
+    <orderEntry type="jdk" jdkName="Elixir 1.9.1" jdkType="Elixir SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="credo" level="project" />
+    <orderEntry type="library" name="dialyxir" level="project" />
+    <orderEntry type="library" name="bunt" level="project" />
+    <orderEntry type="library" name="jason" level="project" />
+    <orderEntry type="library" name="ex_doc" level="project" />
+    <orderEntry type="library" name="inch_ex" level="project" />
+    <orderEntry type="library" name="ex_doc" level="project" />
+    <orderEntry type="library" name="inch_ex" level="project" />
+  </component>
+</module>

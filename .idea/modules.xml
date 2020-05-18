@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file:///mnt/Lab/Code/rex_umbrella/apps/rex//rex.iml" filepath="/mnt/Lab/Code/rex_umbrella/apps/rex//rex.iml" />
+      <module fileurl="file:///mnt/Lab/Code/rex_umbrella//rex_umbrella.iml" filepath="/mnt/Lab/Code/rex_umbrella//rex_umbrella.iml" />
+      <module fileurl="file:///mnt/Lab/Code/rex_umbrella/apps/rex_web//rex_web.iml" filepath="/mnt/Lab/Code/rex_umbrella/apps/rex_web//rex_web.iml" />
+    </modules>
+  </component>
+</project>
