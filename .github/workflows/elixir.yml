@@ -14,6 +14,7 @@ jobs:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DATABASE: ${{ secrets.DATABASE }}
+      MIX_ENV: test
       PORT: 5432
       
     steps:
@@ -29,3 +30,5 @@ jobs:
       run: mix deps.get
     - name: Run Tests
       run: mix test
+    - name: Get coverage
+      run: mix coveralls
