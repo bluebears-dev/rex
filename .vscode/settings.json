@@ -9,5 +9,8 @@
             "server": "localhost",
             "username": "rex"
         }
+    ],
+    "cSpell.words": [
+        "defenum"
     ]
 }
