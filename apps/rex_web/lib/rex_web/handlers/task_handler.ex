@@ -7,7 +7,7 @@ defmodule RexWeb.TaskHandler do
   """
   require RexWeb.Events
   alias RexWeb.{Events, LoadBalancing, ProjectHandler}
-  alias Rex.{Entity, Manager}
+  alias RexData.{Project, Manager}
 
   @spec handle_fetch_task(String.t()) :: Task.t() | nil
   def handle_fetch_task(node_id) do
@@ -25,9 +25,9 @@ defmodule RexWeb.TaskHandler do
   end
 
   def save_fragment(project_id, frame, file) do
-    task = Entity.get_task_by_project(project_id, frame)
-    path = Entity.save_fragment(task, file)
-    Entity.update_task(task, %{path: path})
+    task = Project.get_task_by_project(project_id, frame)
+    path = Project.save_fragment(task, file)
+    Project.update_task(task, %{path: path})
   end
 
   defp is_finished?() do

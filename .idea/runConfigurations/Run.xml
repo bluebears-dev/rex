@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run" type="MixRunConfigurationType" factoryName="Elixir Mix">
-    <mix>
-      <argument>phx.server</argument>
-    </mix>
-    <module-filters inherit-application-module-filters="true" />
-    <method v="2" />
-  </configuration>
-</component>

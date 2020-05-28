@@ -1,7 +1,7 @@
 require Logger
 
 defmodule RexWeb.LoadBalancing.RoundRobin do
-  alias Rex.{Entity, Manager}
+  alias RexData.{Project, Manager}
   alias RexWeb.LoadBalancing
   @behaviour LoadBalancing
 
@@ -10,8 +10,8 @@ defmodule RexWeb.LoadBalancing.RoundRobin do
     Logger.debug(node_id)
 
     with {:ok, %{project: %{id: project_id}}} <- Manager.get_state(),
-         task when not is_nil(task) <- Entity.first_free_task(project_id) do
-      Entity.update_task(task, %{node: node_id})
+         task when not is_nil(task) <- Project.first_free_task(project_id) do
+      Project.update_task(task, %{node: node_id})
     end
   end
 end
