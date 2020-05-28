@@ -1,3 +1,0 @@
-# Rex
-
-**TODO: Add description**

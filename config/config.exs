@@ -10,12 +10,12 @@
 use Mix.Config
 
 # Configure Mix tasks and generators
-config :rex,
-  ecto_repos: [Rex.Repo]
+config :rex_data,
+  ecto_repos: [RexData.Repo]
 
 config :rex_web,
-  ecto_repos: [Rex.Repo],
-  generators: [context_app: :rex]
+  ecto_repos: [RexData.Repo],
+  generators: [context_app: :rex_data]
 
 # Configures the endpoint
 config :rex_web, RexWeb.Endpoint,

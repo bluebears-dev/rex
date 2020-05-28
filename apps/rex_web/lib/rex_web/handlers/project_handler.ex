@@ -2,11 +2,14 @@ require Logger
 
 defmodule RexWeb.ProjectHandler do
   require RexWeb.Events
-  alias Rex.{Entity, Manager}
+
+  alias RexData.Project
+  alias RexData.Project.ProjectInfo
+  alias RexData.Manager
   alias RexWeb.{Endpoint, Events}
 
   def handle_new(payload) do
-    with {:ok, _project} <- Entity.create_project(payload),
+    with {:ok, _project} <- Project.create_project(payload),
          {:ok, started_project} <- start_new_project() do
       response = %{project_id: started_project.id}
       {:ok, response}
@@ -14,19 +17,20 @@ defmodule RexWeb.ProjectHandler do
   end
 
   def handle_cancel(id),
-    do: Entity.cancel_project(id)
+    do: Project.cancel_project(id)
 
+  @spec handle_download(any) :: {:ok, any} | {:error, <<_::64, _::_*8>>, :not_found}
   def handle_download(id) do
-    case Entity.get_project(id) do
+    case Project.get_project(id) do
       nil ->
         {:error, "Project #{id} has not been found", :not_found}
 
-      %Entity.Project{path: path} ->
+      %ProjectInfo{path: path} ->
         {:ok, path}
     end
   end
 
-  @spec get_current_project() :: Entity.Project.t()
+  @spec get_current_project() :: ProjectInfo.t()
   def get_current_project() do
     with {:ok, response} <- Manager.get_state(),
          %{project: project} <- response,
@@ -38,7 +42,7 @@ defmodule RexWeb.ProjectHandler do
     end
   end
 
-  @spec split_project(Entity.Project.t()) :: any
+  @spec split_project(ProjectInfo.t()) :: any
   def split_project(project) do
     Logger.debug("Splitting project to #{project.total_frames} tasks")
 
@@ -50,14 +54,14 @@ defmodule RexWeb.ProjectHandler do
         project: project.id
       }
     end)
-    |> Entity.batch_create_task()
+    |> Project.batch_create_task()
   end
 
-  @spec start_new_project() :: {:ok, Entity.Project.t()} | {:warn, binary} | {:error, binary}
+  @spec start_new_project() :: {:ok, ProjectInfo.t()} | {:warn, binary} | {:error, binary}
   def start_new_project() do
     with nil <- get_current_project(),
-         project when project != nil <- Entity.next_project(),
-         {:ok, new_project} = response = Entity.update_project(project, %{state: :in_progress}) do
+         project when project != nil <- Project.next_project(),
+         {:ok, new_project} = response = Project.update_project(project, %{state: :in_progress}) do
       {:ok, _result} = split_project(project)
       Manager.start_new_project(new_project)
 
@@ -83,8 +87,8 @@ defmodule RexWeb.ProjectHandler do
   end
 
   def handle_project_status(project_id) do
-    with all_tasks when is_list(all_tasks) <- Entity.list_task(project_id),
-         complete_tasks when is_list(complete_tasks) <- Entity.list_complete_task(project_id) do
+    with all_tasks when is_list(all_tasks) <- Project.list_task(project_id),
+         complete_tasks when is_list(complete_tasks) <- Project.list_complete_task(project_id) do
       all_tasks_count = Enum.count(all_tasks)
 
       if all_tasks_count > 0 do

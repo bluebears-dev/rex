@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :rex, Rex.Repo,
+config :rex_data, RexData.Repo,
   username: "rex",
   password: "supervisor",
   database: "rex",

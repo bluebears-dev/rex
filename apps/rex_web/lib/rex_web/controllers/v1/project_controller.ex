@@ -4,7 +4,7 @@ defmodule RexWeb.V1.ProjectController do
   use RexWeb, :controller
 
   alias Jason
-  alias Rex.Utils
+  alias RexData.Utils
   alias RexWeb.{ProjectHandler, TaskHandler}
 
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
