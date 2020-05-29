@@ -27,7 +27,16 @@ defmodule RexData.Project.ProjectInfo do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:path, :type, :width, :height, :starting_frame, :total_frames, :result, :state])
+    |> cast(attrs, [
+      :path,
+      :type,
+      :width,
+      :height,
+      :starting_frame,
+      :total_frames,
+      :result,
+      :state
+    ])
     |> validate_required([:path, :type, :width, :height, :starting_frame, :total_frames])
   end
 

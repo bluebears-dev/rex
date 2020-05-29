@@ -10,20 +10,27 @@ defmodule RexWeb.V1.ProjectController do
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, body) do
     status = ProjectHandler.handle_new(body)
-    Logger.debug("Project handler response #{inspect status}")
+    Logger.debug("Project handler response #{inspect(status)}")
+
     case status do
       {:ok, response} ->
         conn
         |> send_resp(:ok, Jason.encode!(response))
+
       {:warn, message} ->
         conn
         |> send_resp(:accepted, Jason.encode!([message]))
+
       {:error, message, status} when is_binary(message) ->
         conn
         |> send_resp(status, Jason.encode!([message]))
+
       {:error, changeset} ->
         conn
-        |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
+        |> send_resp(
+          :bad_request,
+          Jason.encode!(Utils.format_validation_errors(changeset.errors))
+        )
     end
   end
 
@@ -33,12 +40,17 @@ defmodule RexWeb.V1.ProjectController do
       {:ok, response} ->
         conn
         |> send_resp(:ok, Jason.encode!(response))
+
       {:error, message, status} when is_binary(message) ->
         conn
         |> send_resp(status, message)
+
       {:error, changeset} ->
         conn
-        |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
+        |> send_resp(
+          :bad_request,
+          Jason.encode!(Utils.format_validation_errors(changeset.errors))
+        )
     end
   end
 
@@ -48,12 +60,17 @@ defmodule RexWeb.V1.ProjectController do
       {:ok, _changeset} ->
         conn
         |> send_resp(:no_content, "")
+
       {:error, message, status} when is_binary(message) ->
         conn
         |> send_resp(status, Jason.encode!([message]))
+
       {:error, changeset} ->
         conn
-        |> send_resp(:bad_request, Jason.encode!(Utils.format_validation_errors(changeset.errors)))
+        |> send_resp(
+          :bad_request,
+          Jason.encode!(Utils.format_validation_errors(changeset.errors))
+        )
     end
   end
 
@@ -63,6 +80,7 @@ defmodule RexWeb.V1.ProjectController do
         conn
         |> put_resp_header("content-disposition", ~s(attachment; filename="#{path}"))
         |> send_file(200, path)
+
       {:error, message, status} ->
         conn
         |> send_resp(status, Jason.encode!([message]))
@@ -71,6 +89,7 @@ defmodule RexWeb.V1.ProjectController do
 
   def register_fragment(conn, %{"id" => id, "frame" => frame, "fragment" => file}) do
     TaskHandler.save_fragment(id, frame, file)
+
     conn
     |> send_resp(200, "")
   end

@@ -5,7 +5,7 @@ defmodule RexWeb.ProjectHandler do
 
   alias RexData.Project
   alias RexData.Project.ProjectInfo
-  alias RexData.Manager
+  alias RexData.State
   alias RexWeb.{Endpoint, Events}
 
   def handle_new(payload) do
@@ -32,7 +32,7 @@ defmodule RexWeb.ProjectHandler do
 
   @spec get_current_project() :: ProjectInfo.t()
   def get_current_project() do
-    with {:ok, response} <- Manager.get_state(),
+    with {:ok, response} <- State.get_state(),
          %{project: project} <- response,
          %{state: :in_progress} <- project do
       project
@@ -63,9 +63,10 @@ defmodule RexWeb.ProjectHandler do
          project when project != nil <- Project.next_project(),
          {:ok, new_project} = response = Project.update_project(project, %{state: :in_progress}) do
       {:ok, _result} = split_project(project)
-      Manager.start_new_project(new_project)
+      State.start_new_project(new_project)
 
       Logger.debug("Broadcasting info about new project")
+
       Endpoint.broadcast!(
         "worker:rendering",
         Events.new_project(),
@@ -80,10 +81,9 @@ defmodule RexWeb.ProjectHandler do
     end
   end
 
-
   @spec close_project() :: :ok | :error
   def close_project() do
-    Manager
+    State
   end
 
   def handle_project_status(project_id) do
@@ -106,7 +106,7 @@ defmodule RexWeb.ProjectHandler do
   end
 
   def start_next_project() do
-    with {:ok, _} <- Manager.close_project() do
+    with {:ok, _} <- State.close_project() do
       start_new_project()
     end
   end

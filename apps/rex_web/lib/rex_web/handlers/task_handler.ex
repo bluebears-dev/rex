@@ -7,7 +7,7 @@ defmodule RexWeb.TaskHandler do
   """
   require RexWeb.Events
   alias RexWeb.{Events, LoadBalancing, ProjectHandler}
-  alias RexData.{Project, Manager}
+  alias RexData.{Project, State}
 
   @spec handle_fetch_task(String.t()) :: Task.t() | nil
   def handle_fetch_task(node_id) do
@@ -19,6 +19,7 @@ defmodule RexWeb.TaskHandler do
         else
           {:ok, Events.no_tasks()}
         end
+
       task ->
         task
     end
@@ -31,13 +32,14 @@ defmodule RexWeb.TaskHandler do
   end
 
   defp is_finished?() do
-    with {:ok, %{project: %{id: project_id}}} <- Manager.get_state(),
+    with {:ok, %{project: %{id: project_id}}} <- State.get_state(),
          {:ok, status} <- ProjectHandler.handle_project_status(project_id) do
       %{
         all: all,
         complete: complete
       } = status
-      Logger.info("Project status: #{inspect status}")
+
+      Logger.info("Project status: #{inspect(status)}")
       all === complete
     end
   end

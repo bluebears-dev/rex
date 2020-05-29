@@ -103,5 +103,4 @@ defmodule RexData.Node do
   @spec node_exists?(String.t()) :: boolean
   def node_exists?(node_id),
     do: Repo.exists?(from node in NodeInfo, where: node.node_id == ^node_id)
-
 end

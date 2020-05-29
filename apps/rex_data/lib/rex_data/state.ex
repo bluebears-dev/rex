@@ -1,12 +1,12 @@
 require Logger
 
-defmodule RexData.Manager do
+defmodule RexData.State do
   use GenServer
 
   alias RexData.Project.ProjectInfo
   alias RexData.Utils
 
-  @name :manager
+  @name :state_manager
   defstruct project: %ProjectInfo{}
 
   @spec start_link(any) :: any
@@ -34,7 +34,7 @@ defmodule RexData.Manager do
 
   @impl true
   def handle_cast({:start_project, new_project}, state) do
-    Logger.debug("Starting new project: state=#{inspect state}}")
+    Logger.debug("Starting new project: state=#{inspect(state)}}")
     Utils.save_timestamp("project-#{new_project.id}.log", "START")
     {:noreply, %{state | project: new_project}}
   end
