@@ -27,10 +27,10 @@ defmodule RexWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Data.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RexData.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Data.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(RexData.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
