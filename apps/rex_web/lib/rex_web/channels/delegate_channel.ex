@@ -30,6 +30,7 @@ defmodule RexWeb.DelegateChannel do
     case result do
       {:ok, event} when is_binary(event) ->
         {:reply, {:ok, %{event: event}}, socket}
+
       {:ok, task} ->
         {:reply, {:ok, %{event: Events.fetch_task(), payload: task}}, socket}
     end

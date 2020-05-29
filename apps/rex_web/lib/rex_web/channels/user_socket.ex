@@ -8,7 +8,7 @@ defmodule RexWeb.UserSocket do
 
   @spec connect(map, Phoenix.Socket.t(), map) :: {:ok, Phoenix.Socket.t()} | :error
   def connect(_params, socket, _connect_info),
-      do: {:ok, socket}
+    do: {:ok, socket}
 
   @spec id(Phoenix.Socket.t()) :: String.t() | nil
   def id(socket) do

@@ -21,6 +21,7 @@ defmodule RexWeb.NodeHandler do
            reason: "not_found",
            details: "Node ID does not exist"
          }}
+
       _ ->
         {:ok, %{node_id: node_id}}
     end

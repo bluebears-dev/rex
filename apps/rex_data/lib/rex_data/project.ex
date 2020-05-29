@@ -13,7 +13,6 @@ defmodule RexData.Project do
   alias RexData.Repo
   alias RexData.Project.{ProjectInfo, Task}
 
-
   @doc """
   Gets a single project or nil.
 
