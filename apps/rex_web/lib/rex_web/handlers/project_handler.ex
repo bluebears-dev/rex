@@ -1,12 +1,13 @@
 require Logger
 
 defmodule RexWeb.ProjectHandler do
-  require RexWeb.Events
+  require Constants.Events
+  alias Constants.Events
 
   alias RexData.Project
   alias RexData.Project.ProjectInfo
   alias RexData.State
-  alias RexWeb.{Endpoint, Events}
+  alias RexWeb.Endpoint
 
   def handle_new(payload) do
     with {:ok, _project} <- Project.create_project(payload),
