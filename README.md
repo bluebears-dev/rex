@@ -24,24 +24,7 @@ Rex uses *Phoenix Channels* to handle most of node communication. Sometimes dire
 
 ## About project structure
 
-Rex uses umbrella project structure and it contains two main modules: `Rex` and `RexWeb`. 
-
-### Module `Rex`
-
-`Rex` is used as a data module and it provides access to the database. 
-
-### Module `RexWeb`
-
-`RexWeb` handles all the communication. You can find definitions of endpoints and channels inside the aforementioned module.
-
-#### Endpoints
-
-To view the available endpoints you can use:
-```bash-
-mix phx.routes RexWeb.Router
-```
-
-Documentation of these endpoints will be provided in the future along with other changes. 
+Rex uses umbrella project structure and it contains two main modules: [RexData](./apps/rex_data/README.md) and [RexWeb](./apps/rex_web/README.md). 
 
 ## Developer environment
 ### How to set up the project?
@@ -58,14 +41,18 @@ After having dependencies installed, you need to do a few simple steps before st
 * Create `.env` file using provided `.env.example`,
 * Run mix `deps.get` inside the root project directory,
 * Start the database by running `docker-compose up -d`.
+* Run migrations `mix ecto.migrate`
 
 Then you can start the web service by issuing the `mix phx.server` and it will be available on the `localhost:4000`.
 
 ### What is the recommended tooling?
 
 I prefer the `VS Code` as the main editor along with these plugins for Elixir dev:
-* ElixirLinter,
 * ElixirLS Fork: Elixir support and debugger,
 * hex.pm IntelliSense.
 
-The project also uses `dialyxir` and the `credo` for linting and formatting purposes.
+The project also uses `dialyxir` and the `credo` for linting and formatting purposes. You can run those by issuing below commands:
+```
+mix dialyzer
+mix credo
+```
