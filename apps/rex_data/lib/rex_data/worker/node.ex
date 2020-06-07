@@ -23,5 +23,6 @@ defmodule RexData.Worker.Node do
     node
     |> cast(attrs, [:node_id, :name])
     |> validate_required([:node_id, :name])
+    |> unique_constraint(:node_id)
   end
 end

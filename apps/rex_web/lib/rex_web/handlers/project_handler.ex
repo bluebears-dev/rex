@@ -4,9 +4,8 @@ defmodule RexWeb.ProjectHandler do
   require Constants.Events
   alias Constants.Events
 
-  alias RexData.Project
+  alias RexData.{Project, State}
   alias RexData.Project.ProjectInfo
-  alias RexData.State
   alias RexWeb.Endpoint
 
   def handle_new(payload) do
