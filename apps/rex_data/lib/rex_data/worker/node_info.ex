@@ -1,4 +1,4 @@
-defmodule RexData.Node.NodeInfo do
+defmodule RexData.Worker.Node do
   @moduledoc """
   Scheme for node entity.
   It consists of several fields:

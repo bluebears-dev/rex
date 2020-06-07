@@ -1,14 +1,18 @@
 require Logger
 
-defmodule RexWeb.DelegateChannel do
+defmodule RexWeb.WorkerChannel do
   @moduledoc """
   Testing channel.
   """
   require Constants.Events
   alias Constants.Events
-  
+
   use RexWeb, :channel
   alias RexWeb.{NodeHandler, ProjectHandler, TaskHandler}
+
+  def join("worker:new", payload, socket) do
+
+  end
 
   @spec join(String.t(), map, Phoenix.Socket.t()) :: {:ok, map, Phoenix.Socket.t()}
   def join("worker:rendering", payload, socket) do

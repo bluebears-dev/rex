@@ -1,7 +1,7 @@
 defmodule RexWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :rex_web
 
-  socket "/socket", RexWeb.UserSocket,
+  socket "/socket", RexWeb.WorkerSocket,
     websocket: true,
     longpoll: false
 

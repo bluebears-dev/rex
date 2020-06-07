@@ -1,10 +1,11 @@
 require Logger
 
-defmodule RexWeb.UserSocket do
+defmodule RexWeb.WorkerSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "worker:*", RexWeb.DelegateChannel
+  channel "worker:*", RexWeb.WorkerChannel
+
 
   @spec connect(map, Phoenix.Socket.t(), map) :: {:ok, Phoenix.Socket.t()} | :error
   def connect(_params, socket, _connect_info),

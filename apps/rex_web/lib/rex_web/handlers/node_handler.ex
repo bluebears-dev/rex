@@ -8,9 +8,9 @@ defmodule RexWeb.NodeHandler do
   This method is used to handle node joining the rendering.
   """
   alias RexData.{Node, Utils}
-  alias RexData.Node.NodeInfo
+  alias RexData.Node.Node
 
-  @spec handle_join(NodeInfo.t()) :: {:ok, map} | {:error, map}
+  @spec handle_join(Node.t()) :: {:ok, map} | {:error, map}
   def handle_join(%{"node_id" => node_id}) when node_id != "" do
     Logger.info("Trying to join with id: #{node_id}")
 
