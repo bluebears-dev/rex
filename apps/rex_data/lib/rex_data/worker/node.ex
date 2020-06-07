@@ -10,8 +10,11 @@ defmodule RexData.Worker.Node do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @required_fields [:node_id, :name]
+
   @primary_key {:node_id, Ecto.UUID, []}
   @derive {Phoenix.Param, key: :node_id}
+
   schema "nodes" do
     field :name, :string
 
@@ -21,8 +24,8 @@ defmodule RexData.Worker.Node do
   @doc false
   def changeset(node, attrs) do
     node
-    |> cast(attrs, [:node_id, :name])
-    |> validate_required([:node_id, :name])
-    |> unique_constraint(:node_id)
+    |> cast(attrs, @required_fields)
+    |> validate_required(@required_fields)
+    |> unique_constraint(:node_id, name: :nodes_pkey)
   end
 end
