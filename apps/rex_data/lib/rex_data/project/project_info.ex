@@ -5,11 +5,13 @@ defenum(ProjectStateEnum, queued: -1, in_progress: 0, complete: 1, canceled: 2)
 defmodule RexData.Project.ProjectInfo do
   use Ecto.Schema
   import Ecto.Changeset
-  @behaviour Access
+  alias RexData.Project.ProjectInfo
+
+  @required_fields [:path, :type, :width, :height, :starting_frame, :total_frames]
 
   @derive {
     Jason.Encoder,
-    only: [:id, :path, :height, :width, :state, :result, :starting_frame, :total_frames, :type]
+    only: [:id, :state, :result | @required_fields]
   }
   schema "projects" do
     field :path, :string
@@ -24,43 +26,17 @@ defmodule RexData.Project.ProjectInfo do
     timestamps()
   end
 
-  @doc false
+  @spec new(map) :: Ecto.Changeset.t()
+  def new(attrs) do
+    %ProjectInfo{}
+    |> cast(attrs, @required_fields)
+    |> validate_required(@required_fields)
+  end
+
+  @spec changeset(%ProjectInfo{}, map) :: Ecto.Changeset.t()
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [
-      :path,
-      :type,
-      :width,
-      :height,
-      :starting_frame,
-      :total_frames,
-      :result,
-      :state
-    ])
-    |> validate_required([:path, :type, :width, :height, :starting_frame, :total_frames])
-  end
-
-  def fetch(term, key) do
-    term
-    |> Map.from_struct()
-    |> Map.fetch(key)
-  end
-
-  def get(term, key, default) do
-    term
-    |> Map.from_struct()
-    |> Map.get(key, default)
-  end
-
-  def get_and_update(data, key, function) do
-    data
-    |> Map.from_struct()
-    |> Map.get_and_update(key, function)
-  end
-
-  def pop(data, key) do
-    data
-    |> Map.from_struct()
-    |> Map.pop(key)
+    |> cast(attrs, [:result, :state | @required_fields])
+    |> validate_required(@required_fields)
   end
 end

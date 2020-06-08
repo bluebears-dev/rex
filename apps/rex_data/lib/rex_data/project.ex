@@ -21,25 +21,50 @@ defmodule RexData.Project do
     do: Repo.get(ProjectInfo, id)
 
   @doc """
-  Creates a project entity.
+  Prepares a new project by:
+
+    * staging data in a changeset
+    * copying file provided by the user (project binary file)
+    * finally persisting data in the database
+
+  If it fails in any step, the data isn't persisted.
+
+  The path to the copied file will be created if it does not exist.
+  Furthermore, the path is ensured to be uniquely generated for every new project.
   """
-  @spec create_project(map) :: any
-  def create_project(payload \\ %{}) do
-    # TODO violated SR - needs to be split and redone
+  @spec prepare_new_project(map, Path.t()) :: ProjectInfo.t() | {:error, any}
+  def prepare_new_project(payload, file_path) do
+    project_changeset = create_project(payload)
+
+    with new_path <- Ecto.Changeset.fetch_field!(project_changeset, :path),
+         :ok <- copy_file_and_create_path(file_path, new_path) do
+      Repo.insert(project_changeset)
+    end
+  end
+
+  @doc """
+  Creates a project entity.
+  Ensures that path (to the project file) is uniquely generated.
+  """
+  @spec create_project(map) :: Ecto.Changeset.t()
+  def create_project(payload) do
+    # TODO configure path with global app config
     filename = "#{@default_project_dir}/#{Ecto.UUID.generate()}.blend"
+    Logger.debug("Creating new project with: #{inspect(payload)}")
 
-    case validate_and_copy_file(filename, payload["project"], "blend") do
-      :ok ->
-        valid_payload =
-          payload
-          |> Map.drop([:state])
-          |> Map.put("path", filename)
+    payload
+    |> Map.put("path", filename)
+    |> ProjectInfo.new()
+  end
 
-        ProjectInfo.changeset(%ProjectInfo{}, valid_payload)
-        |> Repo.insert()
+  @spec copy_file_and_create_path(Path.t(), Path.t()) :: :ok | {:error, atom}
+  defp copy_file_and_create_path(existing_path, new_path) do
+    # TODO probably split to some module that will handle file saving
+    Logger.info("Copying file '#{existing_path}' to '#{new_path}'")
 
-      error ->
-        error
+    with :ok <- File.mkdir_p(Path.dirname(new_path)) do
+      do_not_overwrite = fn _, _ -> false end
+      File.cp(existing_path, new_path, do_not_overwrite)
     end
   end
 
