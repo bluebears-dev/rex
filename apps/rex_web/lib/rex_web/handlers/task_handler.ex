@@ -5,8 +5,10 @@ defmodule RexWeb.TaskHandler do
   This module contains logic involving handling task related
   events received from nodes or generally task related operations.
   """
-  require RexWeb.Events
-  alias RexWeb.{Events, LoadBalancing, ProjectHandler}
+  require Constants.Events
+  alias Constants.Events
+
+  alias RexWeb.{LoadBalancing, ProjectHandler}
   alias RexData.{Project, State}
 
   @spec handle_fetch_task(String.t()) :: Task.t() | nil

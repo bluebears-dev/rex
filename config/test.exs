@@ -4,7 +4,7 @@ use Mix.Config
 config :rex_data, RexData.Repo,
   username: "rex",
   password: "supervisor",
-  database: "rex",
+  database: "rex_test",
   port: 5432,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

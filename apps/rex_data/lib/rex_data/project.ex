@@ -14,24 +14,18 @@ defmodule RexData.Project do
   alias RexData.Project.{ProjectInfo, Task}
 
   @doc """
-  Gets a single project or nil.
-
-  ## Examples
-
-      iex> get_project(123)
-      %Project{}
-
-      iex> get_project(456)
-      nil
-
+  Gets a single project or `nil` if project with given ID does not exist.
   """
+  @spec get_project(String.t()) :: %ProjectInfo{} | nil
   def get_project(id),
     do: Repo.get(ProjectInfo, id)
 
   @doc """
   Creates a project entity.
   """
+  @spec create_project(map) :: any
   def create_project(payload \\ %{}) do
+    # TODO violated SR - needs to be split and redone
     filename = "#{@default_project_dir}/#{Ecto.UUID.generate()}.blend"
 
     case validate_and_copy_file(filename, payload["project"], "blend") do
@@ -92,6 +86,7 @@ defmodule RexData.Project do
   Cancel a project entity.
   """
   def cancel_project(id) do
+    # TODO violated SR - should take changeset instead and modify it properly
     case get_project(id) do
       nil ->
         {:error, "No project of #{id} has been found", :not_found}
@@ -129,12 +124,6 @@ defmodule RexData.Project do
 
   @doc """
   Returns the list of tasks for given project id.
-
-  ## Examples
-
-      iex> list_task(1)
-      [%Task{}, ...]
-
   """
   @spec list_task(binary) :: list(Task.t())
   def list_task(project_id) do
@@ -147,15 +136,6 @@ defmodule RexData.Project do
 
   @doc """
   Gets a single task or nil.
-
-  ## Examples
-
-      iex> get_task(123)
-      %Task{}
-
-      iex> get_task(456)
-      nil
-
   """
   @spec get_task(integer) :: Task.t()
   def get_task(id),
@@ -193,12 +173,6 @@ defmodule RexData.Project do
 
   @doc """
   Returns the first free tasks.
-
-  ## Examples
-
-      iex> first_free_task(1)
-      %Task{}
-
   """
   @spec first_free_task(binary) :: Task.t()
   def first_free_task(project_id) do

@@ -1,4 +1,4 @@
-defmodule RexWeb.Events do
+defmodule Constants.Events do
   @moduledoc """
   This module provides all event names that are used across the application.
   """
