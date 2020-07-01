@@ -9,6 +9,8 @@ config :rex_data, RexData.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :rex_data, RexData.FileManager, path: "doesnt_matter"
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :rex_web, RexWeb.Endpoint,

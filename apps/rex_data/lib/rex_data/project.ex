@@ -5,12 +5,11 @@ defmodule RexData.Project do
   The Project context.
   Contains both project and task schemes along with related methods.
   """
-  @default_project_dir "./project_files"
   @default_fragments_dir "./fragments"
 
   import Ecto.Query, warn: false
 
-  alias RexData.Repo
+  alias RexData.{FileManager, Repo}
   alias RexData.Project.{ProjectInfo, Task}
 
   @doc """
@@ -37,7 +36,7 @@ defmodule RexData.Project do
     project_changeset = create_project(payload)
 
     with new_path <- Ecto.Changeset.fetch_field!(project_changeset, :path),
-         :ok <- copy_file_and_create_path(file_path, new_path) do
+         :ok <- FileManager.copy_file(file_path, new_path) do
       Repo.insert(project_changeset)
     end
   end
@@ -48,8 +47,7 @@ defmodule RexData.Project do
   """
   @spec create_project(map) :: Ecto.Changeset.t()
   def create_project(payload) do
-    # TODO configure path with global app config
-    filename = "#{@default_project_dir}/#{Ecto.UUID.generate()}.blend"
+    filename = "#{Ecto.UUID.generate()}.blend"
     Logger.debug("Creating new project with: #{inspect(payload)}")
 
     payload
@@ -57,17 +55,7 @@ defmodule RexData.Project do
     |> ProjectInfo.new()
   end
 
-  @spec copy_file_and_create_path(Path.t(), Path.t()) :: :ok | {:error, atom}
-  defp copy_file_and_create_path(existing_path, new_path) do
-    # TODO probably split to some module that will handle file saving
-    Logger.info("Copying file '#{existing_path}' to '#{new_path}'")
-
-    with :ok <- File.mkdir_p(Path.dirname(new_path)) do
-      do_not_overwrite = fn _, _ -> false end
-      File.cp(existing_path, new_path, do_not_overwrite)
-    end
-  end
-
+  @spec save_fragment(atom | %{frame: any, project: any}, Plug.Upload.t()) :: <<_::64, _::_*8>>
   @doc """
   Saves the rendered fragment to the filesystem.
   """

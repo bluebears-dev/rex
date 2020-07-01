@@ -1,7 +1,7 @@
 defmodule RexData.ProjectTest do
   use RexData.DataCase
   import RexData.Project
-  alias RexData.Project.{ProjectInfo, Task}
+  alias RexData.Project.{ProjectInfo}
   alias RexData.Factory
 
   doctest RexData.Project
