@@ -8,9 +8,9 @@ defmodule RexData.FileManagerTest do
       :ok
     end
 
-    def cp(_path_a, _path_b, _callback) do
+    def cp(path_a, path_b, callback) do
       send(self(), :cp)
-      :ok
+      {:ok, path_a, path_b, callback.(path_a, path_b)}
     end
   end
 
@@ -30,7 +30,8 @@ defmodule RexData.FileManagerTest do
   end
 
   test "copy_file successfully copies the file WHEN there are no errors" do
-    assert :ok = copy_file("some_existing_path", "new_filename", CustomFile)
+    assert {:ok, "some_existing_path", "test/path/new_filename", do_overwrite?} = copy_file("some_existing_path", "new_filename", CustomFile)
+    refute do_overwrite?
 
     assert_received :mkdir
     assert_received :cp

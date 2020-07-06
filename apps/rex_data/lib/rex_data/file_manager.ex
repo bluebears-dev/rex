@@ -23,7 +23,7 @@ defmodule RexData.FileManager do
   The resulting path is different on each environment.
   See configuration files or `RexData.FileManager.get_path/1` for more info
   """
-  @spec copy_file(Path.t(), Path.t()) :: :ok | {:error, atom}
+  @spec copy_file(Path.t(), Path.t(), any) :: :ok | {:error, atom}
   def copy_file(existing_path, new_filename, file_dependency \\ File) do
     do_copy_file(existing_path, Path.join(get_path(), new_filename), file_dependency)
   end
