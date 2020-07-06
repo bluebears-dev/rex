@@ -20,7 +20,7 @@ defmodule RexData.Project do
     do: Repo.get(ProjectInfo, id)
 
   @doc """
-  Prepares a new project by:
+  Creates and saves a new project. It goes by:
 
     * staging data in a changeset
     * copying file provided by the user (project binary file)
@@ -28,15 +28,18 @@ defmodule RexData.Project do
 
   If it fails in any step, the data isn't persisted.
 
+  Third argument serves as a dependency injection for testing purposes.
+  It defaults to `File` module and should be left unchanged in most cases.
+
   The path to the copied file will be created if it does not exist.
   Furthermore, the path is ensured to be uniquely generated for every new project.
   """
-  @spec prepare_new_project(map, Path.t()) :: ProjectInfo.t() | {:error, any}
-  def prepare_new_project(payload, file_path) do
+  @spec insert_new_project(map, Path.t(), any) :: {:ok, ProjectInfo.t()} | {:error, any}
+  def insert_new_project(payload, file_path, file_dependency \\ File) do
     project_changeset = create_project(payload)
 
     with new_path <- Ecto.Changeset.fetch_field!(project_changeset, :path),
-         :ok <- FileManager.copy_file(file_path, new_path) do
+         :ok <- FileManager.copy_file(file_path, new_path, file_dependency) do
       Repo.insert(project_changeset)
     end
   end
@@ -51,7 +54,7 @@ defmodule RexData.Project do
     Logger.debug("Creating new project with: #{inspect(payload)}")
 
     payload
-    |> Map.put("path", filename)
+    |> Map.put(:path, filename)
     |> ProjectInfo.new()
   end
 

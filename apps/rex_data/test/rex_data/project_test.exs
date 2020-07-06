@@ -1,8 +1,9 @@
 defmodule RexData.ProjectTest do
   use RexData.DataCase
   import RexData.Project
+  alias RexData.{Factory, Repo}
+  alias RexData.FileManager.{BrokenCpFile, BrokenMkdirFile, CustomFile}
   alias RexData.Project.{ProjectInfo}
-  alias RexData.Factory
 
   doctest RexData.Project
 
@@ -19,5 +20,18 @@ defmodule RexData.ProjectTest do
     Factory.insert!(:project)
 
     assert get_project(@not_existing_project_id) == nil
+  end
+
+  test "insert_new_project correctly saves project" do
+    {:ok, project_info} = Factory.build(:project)
+    |> Map.from_struct()
+    |> insert_new_project("some_path", CustomFile)
+
+    assert %ProjectInfo{
+      height: 360,
+      width: 480,
+      path: "a"
+    } = project_info
+    assert Repo.exists?(ProjectInfo)
   end
 end
