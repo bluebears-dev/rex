@@ -9,7 +9,7 @@ defmodule RexData.Project do
 
   import Ecto.Query, warn: false
 
-  alias RexData.{FileManager, Repo}
+  alias RexData.{FileManager, Repo, FilenameGenerator}
   alias RexData.Project.{ProjectInfo, Task}
 
   @doc """
@@ -50,7 +50,8 @@ defmodule RexData.Project do
   """
   @spec create_project(map) :: Ecto.Changeset.t()
   def create_project(payload) do
-    filename = "#{Ecto.UUID.generate()}.blend"
+    filename_gen = FilenameGenerator.get()
+    filename = filename_gen.generate_filename(".blend")
     Logger.debug("Creating new project with: #{inspect(payload)}")
 
     payload
@@ -58,7 +59,6 @@ defmodule RexData.Project do
     |> ProjectInfo.new()
   end
 
-  @spec save_fragment(atom | %{frame: any, project: any}, Plug.Upload.t()) :: <<_::64, _::_*8>>
   @doc """
   Saves the rendered fragment to the filesystem.
   """

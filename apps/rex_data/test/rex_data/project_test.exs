@@ -23,15 +23,26 @@ defmodule RexData.ProjectTest do
   end
 
   test "insert_new_project correctly saves project" do
-    {:ok, project_info} = Factory.build(:project)
-    |> Map.from_struct()
-    |> insert_new_project("some_path", CustomFile)
+    {:ok, project_info} =
+      Factory.build(:project)
+      |> Map.from_struct()
+      |> insert_new_project("some_path", CustomFile)
 
     assert %ProjectInfo{
-      height: 360,
-      width: 480,
-      path: "a"
-    } = project_info
+             height: 360,
+             width: 480,
+             path: "stub_filename"
+           } = project_info
+
     assert Repo.exists?(ProjectInfo)
+  end
+
+  test "insert_new_project fails if it cannot copy the file" do
+    {:error, error} =
+      Factory.build(:project)
+      |> Map.from_struct()
+      |> insert_new_project("some_path", BrokenMkdirFile)
+
+    assert :always_fails = error
   end
 end

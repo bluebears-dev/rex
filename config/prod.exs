@@ -15,6 +15,8 @@ config :rex_web, RexWeb.Endpoint,
 
 config :rex_data, RexData.FileManager, path: "/var/lib/rex"
 
+config :rex_data, RexData.FilenameGenerator, generator: RexData.FilenameGenerator.Unique
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

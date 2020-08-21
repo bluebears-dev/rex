@@ -12,6 +12,8 @@ config :rex_data, RexData.Repo,
 
 config :rex_data, RexData.FileManager, path: "./dev_files"
 
+config :rex_data, RexData.FilenameGenerator, generator: RexData.FilenameGenerator.Unique
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
