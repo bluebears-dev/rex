@@ -14,7 +14,7 @@ defmodule RexData.State do
     GenServer.start_link(__MODULE__, state, name: @name)
   end
 
-  @spec start_new_project(ProjectInfo.t()) :: any
+  @spec start_new_project(%ProjectInfo{}) :: any
   def start_new_project(new_project),
     do: GenServer.cast(@name, {:start_project, new_project})
 

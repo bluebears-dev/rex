@@ -10,14 +10,14 @@ defmodule RexData.Factory do
   @default_node_name "TEST_NODE"
   @project_id 1
 
-  @spec build(:node) :: RexData.Worker.Node.t()
+  @spec build(:node) :: %RexData.Worker.Node{}
   def build(:node),
     do: %RexData.Worker.Node{
       node_id: @default_node_id,
       name: @default_node_name
     }
 
-  @spec build(:project) :: RexData.Project.ProjectInfo.t()
+  @spec build(:project) :: %RexData.Project.ProjectInfo{}
   def build(:project),
     do: %RexData.Project.ProjectInfo{
       id: @project_id,

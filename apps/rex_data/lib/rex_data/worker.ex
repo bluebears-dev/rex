@@ -19,12 +19,12 @@ defmodule RexData.Worker do
   @typedoc """
   Alias describing possible failure during validation. Tuple containing either a `Node` or `Changeset`.
   """
-  @type node_or_error_tuple :: {:ok, Node.t()} | {:error, Ecto.Changeset.t()}
+  @type node_or_error_tuple :: {:ok, %Node{}} | {:error, Ecto.Changeset.t()}
 
   @doc """
   Given the Node ID, returns corresponding node if exists, otherwise `nil`.
   """
-  @spec get_node?(node_id) :: Node.t() | nil
+  @spec get_node?(node_id) :: %Node{} | nil
   def get_node?(id),
     do: Repo.get(Node, id)
 

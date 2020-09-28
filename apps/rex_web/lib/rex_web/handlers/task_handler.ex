@@ -11,7 +11,7 @@ defmodule RexWeb.TaskHandler do
   alias RexWeb.{LoadBalancing, ProjectHandler}
   alias RexData.{Project, State}
 
-  @spec handle_fetch_task(String.t()) :: Task.t() | nil
+  @spec handle_fetch_task(String.t()) :: %Task{} | nil
   def handle_fetch_task(node_id) do
     case LoadBalancing.RoundRobin.get_next_task(node_id) do
       nil ->

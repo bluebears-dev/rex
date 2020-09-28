@@ -10,7 +10,7 @@ defmodule RexWeb.NodeHandler do
   alias RexData.{Worker, Utils}
   alias RexData.Worker.Node
 
-  @spec handle_join(Node.t()) :: {:ok, map} | {:error, map}
+  @spec handle_join(%Node{}) :: {:ok, map} | {:error, map}
   def handle_join(%{"node_id" => node_id}) when node_id != "" do
     Logger.info("Trying to join with id: #{node_id}")
 

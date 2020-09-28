@@ -34,7 +34,7 @@ defmodule RexData.Project do
   The path to the copied file will be created if it does not exist.
   Furthermore, the path is ensured to be uniquely generated for every new project.
   """
-  @spec insert_new_project(map, Path.t(), any) :: {:ok, ProjectInfo.t()} | {:error, any}
+  @spec insert_new_project(map, Path.t(), any) :: {:ok, %ProjectInfo{}} | {:error, any}
   def insert_new_project(payload, file_path, file_dependency \\ File) do
     project_changeset = create_project(payload)
 
@@ -62,7 +62,7 @@ defmodule RexData.Project do
   @doc """
   Saves the rendered fragment to the filesystem.
   """
-  @spec save_fragment(Task.t(), %Plug.Upload{}) :: :ok | :error
+  @spec save_fragment(%Task{}, %Plug.Upload{}) :: :ok | :error
   def save_fragment(task, payload) do
     path = "#{@default_fragments_dir}/#{task.project}/#{task.frame}.png"
 
@@ -76,7 +76,7 @@ defmodule RexData.Project do
   end
 
   @spec validate_and_copy_file(String.t(), %Plug.Upload{}, String.t()) ::
-          :ok | {:error, atom, atom}
+          :ok | {:error, String.t(), atom}
   defp validate_and_copy_file(
          new_path,
          %Plug.Upload{path: path, filename: filename},
@@ -108,9 +108,7 @@ defmodule RexData.Project do
         {:error, "No project of #{id} has been found", :not_found}
 
       project ->
-        project
-        |> ProjectInfo.changeset(%{state: :canceled})
-        |> Repo.update()
+        update_project_state(project, :canceled)
     end
   end
 
@@ -129,19 +127,13 @@ defmodule RexData.Project do
     |> Repo.one()
   end
 
-  @doc """
-  Updates a project.
-  """
-  def update_project(%ProjectInfo{} = project, attrs) do
-    project
-    |> ProjectInfo.changeset(attrs)
-    |> Repo.update()
-  end
+  @spec start_project(%ProjectInfo{}) :: any
+  def start_project(project), do: update_project_state(project, :in_progress)
 
   @doc """
   Returns the list of tasks for given project id.
   """
-  @spec list_task(binary) :: list(Task.t())
+  @spec list_task(binary) :: list(%Task{})
   def list_task(project_id) do
     Ecto.Query.from(
       task in Task,
@@ -153,7 +145,7 @@ defmodule RexData.Project do
   @doc """
   Gets a single task or nil.
   """
-  @spec get_task(integer) :: Task.t()
+  @spec get_task(integer) :: %Task{}
   def get_task(id),
     do: Repo.get(Task, id)
 
@@ -190,7 +182,7 @@ defmodule RexData.Project do
   @doc """
   Returns the first free tasks.
   """
-  @spec first_free_task(binary) :: Task.t()
+  @spec first_free_task(binary) :: %Task{}
   def first_free_task(project_id) do
     Ecto.Query.from(
       task in Task,
@@ -220,5 +212,11 @@ defmodule RexData.Project do
       limit: 1
     )
     |> Repo.one()
+  end
+
+  defp update_project_state(project, state) do
+    project
+    |> ProjectInfo.changeset(%{state: state})
+    |> Repo.update()
   end
 end

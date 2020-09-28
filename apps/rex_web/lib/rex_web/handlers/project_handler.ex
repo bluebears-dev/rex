@@ -9,7 +9,7 @@ defmodule RexWeb.ProjectHandler do
   alias RexWeb.Endpoint
 
   def handle_new(payload) do
-    with {:ok, _project} <- Project.create_project(payload),
+    with _project <- Project.create_project(payload),
          {:ok, started_project} <- start_new_project() do
       response = %{project_id: started_project.id}
       {:ok, response}
@@ -30,7 +30,7 @@ defmodule RexWeb.ProjectHandler do
     end
   end
 
-  @spec get_current_project() :: ProjectInfo.t()
+  @spec get_current_project() :: %ProjectInfo{} | nil
   def get_current_project() do
     with {:ok, response} <- State.get_state(),
          %{project: project} <- response,
@@ -42,7 +42,7 @@ defmodule RexWeb.ProjectHandler do
     end
   end
 
-  @spec split_project(ProjectInfo.t()) :: any
+  @spec split_project(%ProjectInfo{}) :: any
   def split_project(project) do
     Logger.debug("Splitting project to #{project.total_frames} tasks")
 
@@ -57,11 +57,11 @@ defmodule RexWeb.ProjectHandler do
     |> Project.batch_create_task()
   end
 
-  @spec start_new_project() :: {:ok, ProjectInfo.t()} | {:warn, binary} | {:error, binary}
+  @spec start_new_project() :: {:ok, %ProjectInfo{}} | {:warn, binary} | {:error, binary}
   def start_new_project() do
     with nil <- get_current_project(),
          project when project != nil <- Project.next_project(),
-         {:ok, new_project} = response = Project.update_project(project, %{state: :in_progress}) do
+         {:ok, new_project} = response = Project.start_project(project) do
       {:ok, _result} = split_project(project)
       State.start_new_project(new_project)
 
@@ -79,11 +79,6 @@ defmodule RexWeb.ProjectHandler do
       nil -> {:error, "No queued projects"}
       response -> {:warn, response}
     end
-  end
-
-  @spec close_project() :: :ok | :error
-  def close_project() do
-    State
   end
 
   def handle_project_status(project_id) do
